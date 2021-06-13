@@ -1,0 +1,16 @@
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\ViewModel.XML
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\ViewModel.dll
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\ViewModel.pdb
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\FSharp.Core.dll
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\LiveCharts.dll
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\LiveCharts.Wpf.dll
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\System.ValueTuple.dll
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\LiveCharts.pdb
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\LiveCharts.xml
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\LiveCharts.Wpf.pdb
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\LiveCharts.Wpf.xml
+D:\Studia\QSP\projects\pricer\ViewModel\bin\Debug\FSharp.Core.xml
+D:\Studia\QSP\projects\pricer\ViewModel\obj\Debug\ViewModel.fsprojAssemblyReference.cache
+D:\Studia\QSP\projects\pricer\ViewModel\obj\Debug\ViewModel.fsproj.CopyComplete
+D:\Studia\QSP\projects\pricer\ViewModel\obj\Debug\ViewModel.dll
+D:\Studia\QSP\projects\pricer\ViewModel\obj\Debug\ViewModel.pdb
