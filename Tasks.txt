@@ -1,0 +1,7 @@
+Task 3:
+With volatility changed to 20%, both the values and deltas started
+to raise faster (i.e. for smaller prices)
+
+Task 4:
+TODO
+
