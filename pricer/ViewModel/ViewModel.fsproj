@@ -55,7 +55,8 @@
     <Compile Include="SimpleCommand.fs" />
     <Compile Include="ViewModelBase.fs" />
     <Compile Include="ConfigurationViewModel.fs" />
-    <Compile Include="PaymentModel.fs" />
+<Compile Include="DistributionFuncs.fs" />    
+<Compile Include="PaymentModel.fs" />
     <Compile Include="PaymentViewModel.fs" />
     <Compile Include="MainViewModel.fs" />
     <Compile Include="OptionDoubleToDoubleConverter.fs" />

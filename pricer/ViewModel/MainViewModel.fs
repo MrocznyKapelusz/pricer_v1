@@ -10,7 +10,8 @@ open LiveCharts.Wpf;
 type MainViewModel() = 
     inherit ViewModelBase()
 
-    let trades = ObservableCollection<PaymentViewModel>()
+    let trades = ObservableCollection<PaymentViewModel2>()
+    let options = ObservableCollection<PaymentViewModel>()
     let data = ObservableCollection<ConfigurationViewModel>()
     let calculationParameters = ObservableCollection<ConfigurationViewModel>()
 
@@ -22,13 +23,18 @@ type MainViewModel() =
         data.Add(ConfigurationViewModel { Key = "FX::USDPLN"; Value = "3.76" })
         data.Add(ConfigurationViewModel { Key = "FX::USDEUR"; Value = "0.87" })
         data.Add(ConfigurationViewModel { Key = "FX::EURGBP"; Value = "0.90" })
-        data.Add(ConfigurationViewModel { Key = "intensity"; Value = "0.02" })
+        data.Add(ConfigurationViewModel { Key = "stock::price"; Value = "8.52" })
+        data.Add(ConfigurationViewModel { Key = "stock::volatility"; Value = "0.1" })
+        data.Add(ConfigurationViewModel { Key = "interestRate::percentage"; Value = "0.02" })
+        
 
         calculationParameters.Add(ConfigurationViewModel { Key = "monteCarlo::runs"; Value = "100" })
         calculationParameters.Add(ConfigurationViewModel { Key = "valuation::baseCurrency"; Value = "USD" })
         calculationParameters.Add(ConfigurationViewModel { Key = "valuation::knownCurrencies"; Value = "USD PLN EUR GBP" })
         calculationParameters.Add(ConfigurationViewModel { Key = "methodology::bumpRisk"; Value = "True" })
         calculationParameters.Add(ConfigurationViewModel { Key = "methodology::bumpSize"; Value = "0.0001" })
+        calculationParameters.Add(ConfigurationViewModel { Key = "option::steps"; Value = "100" })
+        calculationParameters.Add(ConfigurationViewModel { Key = "option::seed"; Value = "77" })
 
     let summary = ObservableCollection<SummaryRow>()
 
@@ -36,8 +42,23 @@ type MainViewModel() =
     let refreshSummary() = 
         summary.Clear()
         
+        let tmp = ObservableCollection<SummaryRow>()
+          
+
+        options
+        |> Seq.choose(fun t -> t.Value) // find correctly evaluated trades
+        |> Seq.groupBy(fun m -> m.Currency)  // group by currency
+        |> Seq.map(fun (ccy, v) -> { Currency = ccy; Value = v |> Seq.map (fun m -> m.Value) |> Seq.sum }) // extract values, calculate a sum
+        |> Seq.iter(tmp.Add) // add to summary page
+
         trades 
         |> Seq.choose(fun t -> t.Value) // find correctly evaluated trades
+        |> Seq.groupBy(fun m -> m.Currency)  // group by currency
+        |> Seq.map(fun (ccy, v) -> { Currency = ccy; Value = v |> Seq.map (fun m -> m.Value) |> Seq.sum }) // extract values, calculate a sum
+        |> Seq.iter(tmp.Add) // add to summary page
+
+        tmp
+                 // find correctly evaluated trades
         |> Seq.groupBy(fun m -> m.Currency)  // group by currency
         |> Seq.map(fun (ccy, v) -> { Currency = ccy; Value = v |> Seq.map (fun m -> m.Value) |> Seq.sum }) // extract values, calculate a sum
         |> Seq.iter(summary.Add) // add to summary page
@@ -48,13 +69,35 @@ type MainViewModel() =
 
     let calculate = SimpleCommand calculateFun
 
-    let addTrade = SimpleCommand(fun _ -> 
-            let currentConfig = getCalculationConfiguration ()
-            PaymentRecord.Random currentConfig |> PaymentViewModel |> trades.Add
-            )
+    //let addTrade = SimpleCommand(fun _ -> 
+    //        let currentConfig = getCalculationConfiguration ()
+    //        PaymentRecord.Random currentConfig |> PaymentViewModel |> trades.Add
+    //        )
 
-    let removeTrade = SimpleCommand(fun trade -> trades.Remove (trade :?> PaymentViewModel) |> ignore)
+    let addTrade = SimpleCommand(fun _ ->
+        System.Console.Write("AddPayment")
+        let currentConfig = getCalculationConfiguration ()
+        PaymentRecord.Random currentConfig |> PaymentViewModel2 |> trades.Add
+        )
+
+    let removeTrade = SimpleCommand(fun trade -> trades.Remove (trade :?> PaymentViewModel2) |> ignore)
     let clearTrades = SimpleCommand(fun _ -> trades.Clear () )
+
+
+
+
+    let calculateOptionsFun _ = do
+            options |> Seq.iter(fun option -> option.Calculate(getDataConfiguration (), getCalculationConfiguration ()))
+            refreshSummary()
+
+    let calculateOptions = SimpleCommand calculateOptionsFun
+    let addOption = SimpleCommand(fun _ -> 
+            System.Console.Write("AddOption")
+            let currentConfig = getCalculationConfiguration ()
+            OptionRecord.Random currentConfig |> PaymentViewModel |> options.Add
+            )
+    let removeOption = SimpleCommand(fun option -> options.Remove (option :?> PaymentViewModel) |> ignore)
+    let clearOptions = SimpleCommand(fun _ -> options.Clear () )
 
     (* charting *)
     
@@ -100,6 +143,11 @@ type MainViewModel() =
     member this.ClearTrades = clearTrades
     member this.Calculate = calculate
 
+    member this.AddOption = addOption
+    member this.RemoveOption = removeOption
+    member this.ClearOptions = clearOptions
+    member this.CalculateOptions = calculateOptions
+
     member this.AddMarketData = addMarketDataRecord
     member this.RemoveMarketData = removeMarketDataRecord
     member this.ClearMarketData = clearMarketDataRecord
@@ -111,7 +159,9 @@ type MainViewModel() =
 
     (* data fields *)
     member this.Trades = trades
+    member this.Options = options
     member this.Data = data
+
     member this.CalculationParameters = calculationParameters
     member this.Summary = summary
 

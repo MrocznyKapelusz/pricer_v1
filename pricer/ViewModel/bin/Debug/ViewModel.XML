@@ -2,5 +2,16 @@
 <doc>
 <assembly><name>ViewModel</name></assembly>
 <members>
+<member name="M:DistributionFuncs.normcdf(System.Double)">
+<summary>
+ Computes the cummulative Gaussian distribution at a specified point of interest
+</summary>
+</member>
+<member name="M:DistributionFuncs.erfc(System.Double)">
+<summary>
+ Computes the complementary error function. This function is defined 
+ by 2/sqrt(pi) * integral from x to infinity of exp (-t^2) dt
+</summary>
+</member>
 </members>
 </doc>
